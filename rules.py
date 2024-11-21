@@ -40,7 +40,7 @@ class Rules:
                     ("1@", "0", False),
                     ("0@", "@9", False),
                     ("@0", "", False),
-                    ("@", "", True),
+                    ("@", "", True)
                 ]
             case _:
                 raise Exception()
