@@ -1,10 +1,10 @@
 from typing import List, Tuple
 
 class AlgorithmMarkov:
-    def __init__(self, word : str, rules, alphabet : List[Tuple] = None):
+    def __init__(self, word : str, rules : List[Tuple] = None, alphabet = None):
         self._word =  word 
-        self._rules = rules
-        self._alphabet = alphabet if alphabet else []
+        self._rules = rules if rules else []
+        self._alphabet = alphabet 
 
     @property
     def word(self):
@@ -28,12 +28,16 @@ class AlgorithmMarkov:
     def run(self):
         if self.contains(self._word, "@") == False:
             self._word = "@" + self._word +"@"
+        original_word = self._word
         elements = []
         flag = False                      
         try:
             while not flag:               
                 elements.append(self._word)
                 self._word, flag = self.apply_alg() 
+                if self._word == original_word:
+                    print("Найден цикл")
+                    return []
             elements.append(self._word)
         except ValueError:               
             pass

@@ -47,29 +47,58 @@ class MainWindow(QMainWindow):
                 alg1 = AlgorithmMarkov(word = num1, rules = rule.rules_for_digits(1))
                 self.ui.textEdit.setText(alg1.run())
                 self.ui.result.setText(str(alg1.get_num()))
+                print(f"Исходное число: {num1}\nПолученный результат: {self.ui.result.text()}")
+                print(f"Работа алгоритма: {self.ui.textEdit.toPlainText()}")
         
         if self.ui.comboBox.currentText()[0] == "2":
             num1 = self.ui.num1.text()
-            rule = Rules()
-            alg1 = AlgorithmMarkov(word = num1, rules = rule.rules_for_digits(2))
-            self.ui.textEdit.setText(alg1.run())
-            self.ui.result.setText(str(alg1.get_num()))
+            try:
+                int(num1)
+            except:
+                msg.setWindowTitle("Ошибка")
+                msg.setText("Должно быть введено натуральное число")
+                msg.exec_()
+            if int(num1) <= 0:
+                msg.setWindowTitle("Ошибка")
+                msg.setText("Должно быть введено натуральное число")
+                msg.exec_()
+            else:
+                rule = Rules()
+                alg1 = AlgorithmMarkov(word = num1, rules = rule.rules_for_digits(2))
+                self.ui.textEdit.setText(alg1.run())
+                self.ui.result.setText(str(alg1.get_num()))
+                print(f"Исходное число: {num1}\nПолученный результат: {self.ui.result.text()}")
+                print(f"Работа алгоритма: {self.ui.textEdit.toPlainText()}")
 
         if self.ui.comboBox.currentText()[0] == "3":
             num1 = self.ui.num1.text()
             num2 = self.ui.num2.text()
-            rule = Rules()
-            alg1 = AlgorithmMarkov(word = num1, rules = rule.rules_for_digits(2))
-            alg2 = AlgorithmMarkov(word = num2, rules = rule.rules_for_digits(1))
-            stringOfPermutationsPlus = ""
-            stringOfPermutationsMinus = ""
-            while alg1.get_num() > 0:
-                stringOfPermutationsMinus += alg1.run() + "\n"
-                stringOfPermutationsPlus += alg2.run() + "\n"
-            
-            stringOfPermutationsMinus += "------------------------------------\n" + stringOfPermutationsPlus
-            self.ui.textEdit.setText(stringOfPermutationsMinus)
-            self.ui.result.setText(str(alg2.get_num()))
+            try:
+                int(num1)
+                int(num2)
+            except:
+                msg.setWindowTitle("Ошибка")
+                msg.setText("Должно быть введено натуральное число")
+                msg.exec_()
+            if int(num1) <= 0 or int(num2) <=0:
+                msg.setWindowTitle("Ошибка")
+                msg.setText("Должно быть введено натуральное число")
+                msg.exec_()
+            else:
+                rule = Rules()
+                alg1 = AlgorithmMarkov(word = num1, rules = rule.rules_for_digits(2))
+                alg2 = AlgorithmMarkov(word = num2, rules = rule.rules_for_digits(1))
+                stringOfPermutationsPlus = ""
+                stringOfPermutationsMinus = ""
+                while alg1.get_num() > 0:
+                    stringOfPermutationsMinus += alg1.run() + "\n"
+                    stringOfPermutationsPlus += alg2.run() + "\n"
+                
+                stringOfPermutationsMinus += "------------------------------------\n" + stringOfPermutationsPlus
+                self.ui.textEdit.setText(stringOfPermutationsMinus)
+                self.ui.result.setText(str(alg2.get_num()))
+                print(f"Исходное число1: {num1}\nИсходное число2: {num2}\nПолученный результат: {self.ui.result.text()}")
+                print(f"Работа алгоритма: {self.ui.textEdit.toPlainText()}")
 
     def button_result_strings(self):
         if self.ui.comboBox_strings.currentText()[0] == "1":
@@ -90,6 +119,10 @@ class MainWindow(QMainWindow):
                 alg = AlgorithmMarkov(word = rightWord, rules = self._newRule)
                 self.ui.textEdit_strings.setText(alg.run())
                 self.ui.result_word.setText(alg._word)
+                print(f"Левое слово: {leftWord}\nПравое слово: {rightWord}\nОжидаемый результат: слом\nПолученный результат: {self.ui.result_word.text()}")
+                print(f"Правила замены:{alg._rules}")
+                print(f"Работа алгоритма: {self.ui.textEdit_strings.toPlainText()}")
+
         
         if self.ui.comboBox_strings.currentText()[0] == "2":
             leftWord = self.ui.left_word.text()
@@ -113,8 +146,12 @@ class MainWindow(QMainWindow):
             else:
                 self._newRule.append(("@", "", False))
                 alg = AlgorithmMarkov(word = leftWord, rules = self._newRule)
-                self.ui.textEdit_strings.setText(alg.run())
-                self.ui.result_word.setText(alg._word)
+                if alg.run() == []:
+                    print("Найден цикл")
+                    self.ui.result_word.setText("Найден цикл")
+                else:
+                    self.ui.textEdit_strings.setText(alg.run())
+                    self.ui.result_word.setText(alg._word)
 
     def button_add_rule(self):
         left_zamena = self.ui.left_zamena.text()

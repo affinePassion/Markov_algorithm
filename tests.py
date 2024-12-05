@@ -106,11 +106,11 @@ def test_get_num():
     assert markov.get_num() == 20
 
 def test_increment():
-    word = "19"
+    word = "99"
     rules = Rules().rules_for_digits(1)
     markov = AlgorithmMarkov(word, rules)
     markov.run()
-    assert markov.get_num() == 20
+    assert markov.get_num() == 100
 
 def test_decrement():
     word = "19"
